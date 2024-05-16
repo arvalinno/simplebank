@@ -16,19 +16,22 @@ const (
 )
 
 var testQueries *Queries
+var testDB *pgxpool.Pool
 
 func TestMain(m *testing.M) {
+	var err error
+
 	connConfig, err := pgx.ParseConfig(dbSource)
 	if err != nil {
 		log.Fatal("cannot parse db config:", err)
 	}
 
-	connPool, err := pgxpool.New(context.Background(), connConfig.ConnString())
+	testDB, err = pgxpool.New(context.Background(), connConfig.ConnString())
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
 	}
 
-	testQueries = New(connPool)
+	testQueries = New(testDB)
 
 	os.Exit(m.Run())
 }
