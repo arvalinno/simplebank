@@ -49,7 +49,7 @@ func TestGetAccount(t *testing.T) {
 	require.WithinDuration(t, account1.CreatedAt.Time, account2.CreatedAt.Time, time.Second)
 }
 
-func TestUpdteAccount(t *testing.T) {
+func TestUpdateAccount(t *testing.T) {
 	account1 := createRandomAccount(t)
 
 	arg := UpdateAccountParams{
