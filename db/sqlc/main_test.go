@@ -6,13 +6,9 @@ import (
 	"os"
 	"testing"
 
+	"github.com/arvalinno/simplebank/util"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-)
-
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable"
 )
 
 var testQueries *Queries
@@ -21,7 +17,12 @@ var testDB *pgxpool.Pool
 func TestMain(m *testing.M) {
 	var err error
 
-	connConfig, err := pgx.ParseConfig(dbSource)
+	config, err := util.LoadConfig("../..")
+	if err != nil {
+		log.Fatal("cannot load config: ", err)
+	}
+
+	connConfig, err := pgx.ParseConfig(config.DBSource)
 	if err != nil {
 		log.Fatal("cannot parse db config:", err)
 	}

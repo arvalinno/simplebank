@@ -6,18 +6,18 @@ import (
 
 	"github.com/arvalinno/simplebank/api"
 	db "github.com/arvalinno/simplebank/db/sqlc"
+	"github.com/arvalinno/simplebank/util"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-const (
-	dbDriver      = "postgres"
-	dbSource      = "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable"
-	serverAddress = "0.0.0.0:8080"
-)
-
 func main() {
-	connConfig, err := pgx.ParseConfig(dbSource)
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		log.Fatal("cannot log config:", err)
+	}
+
+	connConfig, err := pgx.ParseConfig(config.DBSource)
 	if err != nil {
 		log.Fatal("cannot parse db config:", err)
 	}
@@ -30,7 +30,7 @@ func main() {
 	store := db.NewStore(conn)
 	server := api.NewServer(store)
 
-	err = server.Start(serverAddress)
+	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("cannot start server")
 	}
