@@ -3,6 +3,7 @@ module github.com/arvalinno/simplebank
 go 1.22.2
 
 require (
+	bou.ke/monkey v1.0.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/validator/v10 v10.21.0
 	github.com/golang/mock v1.6.0
