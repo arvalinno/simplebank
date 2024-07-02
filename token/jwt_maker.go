@@ -45,10 +45,15 @@ func (maker *JWTMaker) VerifyToken(token string) (*Payload, error) {
 		return []byte(maker.secretKey), nil
 	}
 
-	_, err := jwt.ParseWithClaims(token, &Payload{}, keyFunc)
+	jwtToken, err := jwt.ParseWithClaims(token, &Payload{}, keyFunc, jwt.WithExpirationRequired())
 	if err != nil {
 		return nil, err
 	}
 
-	return nil, nil
+	payload, ok := jwtToken.Claims.(*Payload)
+	if !ok {
+		return nil, err
+	}
+
+	return payload, nil
 }

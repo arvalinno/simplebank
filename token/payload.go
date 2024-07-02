@@ -8,8 +8,9 @@ import (
 )
 
 var (
-	ErrInvalidToken = errors.New("token is invalid")
-	ErrExpiredToken = errors.New("token has expired")
+	ErrTokenInvalidClaims = errors.New("token has invalid claims")
+	ErrInvalidToken       = errors.New("token is invalid")
+	ErrExpiredToken       = errors.New("token is expired")
 )
 
 // Payload contains the payload data of the token
@@ -18,7 +19,7 @@ type Payload struct {
 	jwt.RegisteredClaims
 }
 
-func (payload *Payload) Validator() error {
+func (payload *Payload) Valid() error {
 	expiredTime := payload.RegisteredClaims.ExpiresAt.Time
 
 	if time.Now().After(expiredTime) {
