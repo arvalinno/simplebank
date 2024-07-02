@@ -210,7 +210,7 @@ func TestCreateUserAPI(t *testing.T) {
 			log.Println("user:", user)
 
 			// start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			// Marshal body data to JSON
@@ -276,7 +276,7 @@ func TestHashPasswordError(t *testing.T) {
 			defer patch.Unpatch()
 
 			// Start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			// Marshal body data to JSON
