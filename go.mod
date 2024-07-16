@@ -1,6 +1,6 @@
 module github.com/arvalinno/simplebank
 
-go 1.22.2
+go 1.22.5
 
 require (
 	bou.ke/monkey v1.0.2
