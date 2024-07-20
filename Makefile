@@ -1,14 +1,17 @@
 postgres:
-	docker run --name postgres12 --network bank-network -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:latest
+	docker run --name postgres16.3 --network bank-network -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:16.3-alpine3.20
 
 createdb:
-	docker exec -it postgres12 createdb --username=root --owner=root simple_bank 
+	docker exec -it postgres16.3 createdb --username=root --owner=root simple_bank 
+
+execpsql:
+	docker exec -it postgres16.3 psql -U root -d simple_bank
 
 dropdb:
-	docker exec -it postgres12 dropdb simple_bank
+	docker exec -it postgres16.3 dropdb simple_bank
 
 migrateup:
-	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgresql://root:XJAXwSOfHZLn492tcfYP@simple-bank.cbckycaowhyv.ap-southeast-1.rds.amazonaws.com:5432/simple_bank" -verbose up
 
 migrateup1:
 	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable" -verbose up 1
@@ -34,4 +37,4 @@ mock:
 dockerbuild:
 	docker build -t simplebank:latest .
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc test server mock migrateup1 migratedown1 dockerbuild
+.PHONY: postgres createdb execpsql dropdb migrateup migratedown sqlc test server mock migrateup1 migratedown1 dockerbuild
