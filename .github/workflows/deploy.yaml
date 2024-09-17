@@ -13,15 +13,26 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@v0.1.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_KEY }}
-          port: 22
-          script: |
-            cd /path/to/your/app
-            git pull origin main
-            go build -o yourapp
-            sudo systemctl restart yourapp.service
+      - name: Create app.env file
+        run: |
+          echo "DB_DRIVER=${{ secrets.DB_DRIVER }}" >> app.env
+          echo "DB_SOURCE=${{ secrets.DB_SOURCE }}" >> app.env
+          echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}" >> app.env
+          echo "TOKEN_SYMMETRIC=${{ secrets.SERVER_ADDRESS }}" >> app.env
+          echo "ACCESS_TOKEN_DURATION=${{ secrets.ACCESS_TOKEN_DURATION }}" >> app.env
+      
+      - name: Transfer app.env to VPS
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "${SSH_PRIVATE_KEY}" > private_key.pem
+          chmod 600 private_key.pem
+          scp -i private_key.pem app.env user@your-vps-ip:/path/to/your/app
+
+      - name: Build Docker images on VPS
+        run: |
+          ssh -i private_key.pem 103.175.219.140 "cd /app && docker-compose build"
+
+      - name: Deploy application using Docker Compose
+        run: |
+          ssh -i private_key.pem 103.175.219.140 "cd /app && docker-compose down && docker-compose up -d"
