@@ -21,6 +21,10 @@ jobs:
           echo "TOKEN_SYMMETRIC=${{ secrets.SERVER_ADDRESS }}" >> app.env
           echo "ACCESS_TOKEN_DURATION=${{ secrets.ACCESS_TOKEN_DURATION }}" >> app.env
       
+      - name: Add VPS to known_hosts
+        run: |
+          ssh-keyscan 103.175.219.140 >> ~/.ssh/known_hosts
+
       - name: Transfer app.env to VPS
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
