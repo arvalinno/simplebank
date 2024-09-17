@@ -32,12 +32,12 @@ jobs:
         run: |
           echo "${SSH_PRIVATE_KEY}" > private_key.pem
           chmod 600 private_key.pem
-          scp -i private_key.pem app.env arvalinno@103.175.219.140:/app
+          scp -i private_key.pem app.env arvalinno@103.175.219.140:/home/arvalinno/app
 
       - name: Build Docker images on VPS
         run: |
-          ssh -i private_key.pem arvalinno@103.175.219.140 "cd /app && docker-compose build"
+          ssh -i private_key.pem arvalinno@103.175.219.140 "cd /home/arvalinno/app && docker-compose build"
 
       - name: Deploy application using Docker Compose
         run: |
-          ssh -i private_key.pem arvalinno@103.175.219.140 "cd /app && docker-compose down && docker-compose up -d"
+          ssh -i private_key.pem arvalinno@103.175.219.140 "cd /home/arvalinno/app && docker-compose down && docker-compose up -d"
