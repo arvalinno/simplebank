@@ -36,8 +36,8 @@ jobs:
 
       - name: Build Docker images on VPS
         run: |
-          ssh -i private_key.pem arvalinno@103.175.219.140 "cd /home/arvalinno/app && docker-compose build"
+          ssh -i private_key.pem arvalinno@103.175.219.140 "cd /home/arvalinno/app && docker compose build"
 
       - name: Deploy application using Docker Compose
         run: |
-          ssh -i private_key.pem arvalinno@103.175.219.140 "cd /home/arvalinno/app && docker-compose down && docker-compose up -d"
+          ssh -i private_key.pem arvalinno@103.175.219.140 "cd /home/arvalinno/app && docker-compose down && docker compose up -d"
