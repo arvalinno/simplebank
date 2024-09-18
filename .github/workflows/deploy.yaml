@@ -18,7 +18,7 @@ jobs:
           echo "DB_DRIVER=${{ secrets.DB_DRIVER }}" >> app.env
           echo "DB_SOURCE=${{ secrets.DB_SOURCE }}" >> app.env
           echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}" >> app.env
-          echo "TOKEN_SYMMETRIC=${{ secrets.SERVER_ADDRESS }}" >> app.env
+          echo "TOKEN_SYMMETRIC_KEY=${{ secrets.TOKEN_SYMMETRIC_KEY }}" >> app.env
           echo "ACCESS_TOKEN_DURATION=${{ secrets.ACCESS_TOKEN_DURATION }}" >> app.env
       
       - name: Create .ssh directory and add VPS to known_hosts
