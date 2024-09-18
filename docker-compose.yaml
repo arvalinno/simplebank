@@ -12,7 +12,6 @@ services:
       start_period: 30s
       timeout: 10s
 
-
   api:
     build:
       context: .
