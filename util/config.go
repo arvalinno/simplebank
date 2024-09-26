@@ -27,9 +27,21 @@ func LoadConfig(path string) (config Config, err error) {
 
 	err = viper.ReadInConfig()
 	if err != nil {
-		return
+		// If config file is not found, read from environment variables
+		config.DBDriver = viper.GetString("DB_DRIVER")
+		config.DBSource = viper.GetString("DB_SOURCE")
+		config.ServerAddress = viper.GetString("SERVER_ADDRESS")
+		config.TokenSymmetricKey = viper.GetString("TOKEN_SYMMETRIC_KEY")
+		config.AccessTokenDuration = viper.GetDuration("ACCESS_TOKEN_DURATION")
+		config.RefreshTokenDuration = viper.GetDuration("REFRESH_TOKEN_DURATION")
+
+		// Check if essential configurations are still missing
+		if config.DBSource == "" {
+			return config, err
+		}
+	} else {
+		err = viper.Unmarshal(&config)
 	}
 
-	err = viper.Unmarshal(&config)
-	return
+	return config, err
 }
