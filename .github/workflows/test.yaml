@@ -48,10 +48,11 @@ jobs:
       run: make migrateup
 
     - name: Test
-      DB_DRIVER: ${{ secrets.DB_DRIVER }}
-      DB_SOURCE: ${{ secrets.DB_SOURCE }}
-      SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
-      TOKEN_SYMMETRIC_KEY: ${{ secrets.TOKEN_SYMMETRIC_KEY }}
-      ACCESS_TOKEN_DURATION: ${{ secrets.ACCESS_TOKEN_DURATION }}
-      REFRESH_TOKEN_DURATION: ${{ secrets.REFRESH_TOKEN_DURATION }}
+      env:
+        DB_DRIVER: ${{ secrets.DB_DRIVER }}
+        DB_SOURCE: ${{ secrets.DB_SOURCE }}
+        SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
+        TOKEN_SYMMETRIC_KEY: ${{ secrets.TOKEN_SYMMETRIC_KEY }}
+        ACCESS_TOKEN_DURATION: ${{ secrets.ACCESS_TOKEN_DURATION }}
+        REFRESH_TOKEN_DURATION: ${{ secrets.REFRESH_TOKEN_DURATION }}
       run: make test
