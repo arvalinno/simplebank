@@ -36,15 +36,17 @@ func LoadConfig(path string) (config Config, err error) {
 		config.AccessTokenDuration = viper.GetDuration("ACCESS_TOKEN_DURATION")
 		config.RefreshTokenDuration = viper.GetDuration("REFRESH_TOKEN_DURATION")
 
-		fmt.Println("debug env:", config)
-
 		// Check if essential configurations are still missing
 		if config.DBSource == "" {
 			return config, err
 		}
+
+		fmt.Println("debug env:", config, err)
 	} else {
 		err = viper.Unmarshal(&config)
 	}
+
+	fmt.Println("debug env2:", config, err)
 
 	return config, err
 }
