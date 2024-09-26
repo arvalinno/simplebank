@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 var (
@@ -15,7 +16,8 @@ var (
 
 // Payload contains the payload data of the token
 type Payload struct {
-	Username string `json:"username"`
+	ID       uuid.UUID `json:"id"`
+	Username string    `json:"username"`
 	jwt.RegisteredClaims
 }
 
