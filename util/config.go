@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/spf13/viper"
@@ -34,6 +35,8 @@ func LoadConfig(path string) (config Config, err error) {
 		config.TokenSymmetricKey = viper.GetString("TOKEN_SYMMETRIC_KEY")
 		config.AccessTokenDuration = viper.GetDuration("ACCESS_TOKEN_DURATION")
 		config.RefreshTokenDuration = viper.GetDuration("REFRESH_TOKEN_DURATION")
+
+		fmt.Println("debug env:", config)
 
 		// Check if essential configurations are still missing
 		if config.DBSource == "" {
