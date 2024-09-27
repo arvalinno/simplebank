@@ -50,7 +50,7 @@ jobs:
     - name: Test
       env:
         DB_DRIVER: ${{ secrets.DB_DRIVER }}
-        DB_SOURCE: ${{ secrets.DB_SOURCE }}
+        DB_SOURCE: postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}?sslmode=disable
         SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
         TOKEN_SYMMETRIC_KEY: ${{ secrets.TOKEN_SYMMETRIC_KEY }}
         ACCESS_TOKEN_DURATION: ${{ secrets.ACCESS_TOKEN_DURATION }}
