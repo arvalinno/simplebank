@@ -10,7 +10,7 @@ import (
 // Maker is an interface for managing tokens
 type Maker interface {
 	// CreateToken creates new token for specific username and duration
-	CreateToken(username string, duration time.Duration) (string, error)
+	CreateToken(username string, duration time.Duration) (string, *Payload, error)
 
 	// VerifyToken checks if the token is valid or not
 	VerifyToken(token string) (*Payload, error)
@@ -23,11 +23,11 @@ func NewPayload(username string, duration time.Duration) (*Payload, error) {
 	}
 
 	payload := &Payload{
+		ID:       tokenID,
 		Username: username,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(duration)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			ID:        tokenID.String(),
 		},
 	}
 	return payload, nil

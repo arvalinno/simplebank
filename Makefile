@@ -39,4 +39,7 @@ mock:
 dockerbuild:
 	docker build -t simplebank:latest .
 
+createnewdbmigration:
+	migrate create -ext sql -dir db/migration -seq add_sessions
+
 .PHONY: postgres createdb execpsql dropdb migrateup migratedown sqlc test server mock migrateup1 migratedown1 dockerbuild
