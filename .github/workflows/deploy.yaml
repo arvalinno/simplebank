@@ -28,24 +28,6 @@ jobs:
           chmod 600 private_key.pem 
           ssh-keyscan ${{ secrets.SSH_HOST}} >> ~/.ssh/known_hosts
         
-      - name: Create woking dir if not existed
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST}}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            mkdir -p ~/app
-  
-      - name: Transfer app.env to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SSH_HOST}}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "app.env"
-          target: "/home/${{ secrets.SSH_USERNAME }}/app/"
-
       - name: Update code on VPS (git pull)
         uses: appleboy/ssh-action@master
         with:
@@ -53,6 +35,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            mkdir -p ~/app
             cd /home/${{ secrets.SSH_USERNAME }}/app
             # Check if .git directory exists (indicating it's a Git repo)
             if [ -d ".git" ]; then
@@ -62,6 +45,15 @@ jobs:
               echo "Not a Git repository, cloning repository..."
               git clone https://github.com/arvalinno/simplebank.git .
             fi
+
+      - name: Transfer app.env to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST}}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "app.env"
+          target: "/home/${{ secrets.SSH_USERNAME }}/app/"
 
       - name: Build Docker images on VPS
         uses: appleboy/ssh-action@master
