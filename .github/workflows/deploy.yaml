@@ -27,7 +27,7 @@ jobs:
           ssh-keyscan arva888.xyz >> ~/.ssh/known_hosts
   
       - name: Transfer app.env to VPS
-        uses: appleboy/ssh-action@v0.1.3
+        uses: appleboy/scp-action@v0.1.3
         with:
           host: arva888.xyz
           username: arvalinno
