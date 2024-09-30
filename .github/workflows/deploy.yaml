@@ -27,6 +27,15 @@ jobs:
           echo "${SSH_PRIVATE_KEY}" > private_key.pem
           chmod 600 private_key.pem 
           ssh-keyscan arva888.xyz >> ~/.ssh/known_hosts
+        
+      - name: Create woking dir if not existed
+        uses: appleboy/ssh-action@master
+        with:
+          host: arva888.xyz
+          username: arvalinno
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            mkdir -p ~/app
   
       - name: Transfer app.env to VPS
         uses: appleboy/scp-action@master
@@ -45,6 +54,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/arvalinno/app
+            # Check if .git directory exists (indicating it's a Git repo)
+            if [ -d ".git" ]; then
+              echo "Git repository exists, pulling the latest changes..."
+              git pull origin main
+            else
+              echo "Not a Git repository, cloning repository..."
+              git clone https://github.com/your-username/your-repo.git .
+            fi
             git pull origin main
 
       - name: Build Docker images on VPS
