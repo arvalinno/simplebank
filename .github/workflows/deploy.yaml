@@ -21,9 +21,11 @@ jobs:
           echo "TOKEN_SYMMETRIC_KEY=${{ secrets.TOKEN_SYMMETRIC_KEY }}" >> app.env
           echo "ACCESS_TOKEN_DURATION=${{ secrets.ACCESS_TOKEN_DURATION }}" >> app.env
       
-      - name: Create .ssh directory and add VPS to known_hosts
+      - name: Set up SSH (read-write permission) and add VPS to known_hosts
         run: |
           mkdir -p ~/.ssh
+          echo "${SSH_PRIVATE_KEY}" > private_key.pem
+          chmod 600 private_key.pem 
           ssh-keyscan arva888.xyz >> ~/.ssh/known_hosts
   
       - name: Transfer app.env to VPS
