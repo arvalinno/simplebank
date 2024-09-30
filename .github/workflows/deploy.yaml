@@ -63,7 +63,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/${{ secrets.SSH_USERNAME }}/app
-            DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_NAME=$DB_NAME docker compose build --no-cache
+            docker compose build --no-cache
 
       - name: Deploy application using Docker Compose
         uses: appleboy/ssh-action@master
@@ -79,6 +79,5 @@ jobs:
             export DB_DRIVER="${{ secrets.DB_DRIVER}}"
 
             # Pass environment variables to Docker Compose
-
             cd /home/${{ secrets.SSH_USERNAME }}/app
-            docker compose down && docker compose up -d
+            DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_NAME=$DB_NAME DB_DRIVER=$DB_DRIVER docker compose down && docker compose up -d
