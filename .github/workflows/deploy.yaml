@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            mkdir -p ~/app
+            mkdir -p app
             cd /home/${{ secrets.SSH_USERNAME }}/app
             # Check if .git directory exists (indicating it's a Git repo)
             if [ -d ".git" ]; then
