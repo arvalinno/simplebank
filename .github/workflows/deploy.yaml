@@ -62,12 +62,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # Set environment variables using GitHub Secrets
-            export DB_USER="${{ secrets.DB_USER }}"
-            export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
-            export DB_NAME="${{ secrets.DB_NAME}}"
-
-            # Pass environment variables to Docker Compose
             cd /home/${{ secrets.SSH_USERNAME }}/app
             DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_NAME=$DB_NAME docker compose build --no-cache
 
@@ -78,5 +72,13 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            # Set environment variables using GitHub Secrets
+            export DB_USER="${{ secrets.DB_USER }}"
+            export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+            export DB_NAME="${{ secrets.DB_NAME}}"
+            export DB_DRIVER="${{ secrets.DB_DRIVER}}"
+
+            # Pass environment variables to Docker Compose
+
             cd /home/${{ secrets.SSH_USERNAME }}/app
             docker compose down && docker compose up -d
