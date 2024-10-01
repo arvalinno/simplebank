@@ -42,4 +42,10 @@ dockerbuild:
 createnewdbmigration:
 	migrate create -ext sql -dir db/migration -seq add_sessions
 
-.PHONY: postgres createdb execpsql dropdb migrateup migratedown sqlc test server mock migrateup1 migratedown1 dockerbuild
+db_docs:
+	dbdocs build doc/db.dbml
+
+db_schema:
+	dbml2sql --postgres -o doc/schema.sql doc/db.dbml
+
+.PHONY: postgres createdb execpsql dropdb migrateup migratedown sqlc test server mock migrateup1 migratedown1 dockerbuild db_docs db_schema
