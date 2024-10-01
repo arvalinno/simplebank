@@ -26,43 +26,58 @@ jobs:
           mkdir -p ~/.ssh
           echo "${SSH_PRIVATE_KEY}" > private_key.pem
           chmod 600 private_key.pem 
-          ssh-keyscan arva888.xyz >> ~/.ssh/known_hosts
-  
-      - name: Transfer app.env to VPS
-        uses: appleboy/scp-action@v0.1.3
+          ssh-keyscan ${{ secrets.SSH_HOST}} >> ~/.ssh/known_hosts
+        
+      - name: Update code on VPS (git pull)
+        uses: appleboy/ssh-action@master
         with:
-          host: arva888.xyz
-          username: arvalinno
+          host: ${{ secrets.SSH_HOST}}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            mkdir -p app
+            cd /home/${{ secrets.SSH_USERNAME }}/app
+            # Check if .git directory exists (indicating it's a Git repo)
+            if [ -d ".git" ]; then
+              echo "Git repository exists, pulling the latest changes..."
+              git pull origin main
+            else
+              echo "Not a Git repository, cloning repository..."
+              git clone https://github.com/arvalinno/simplebank.git .
+            fi
+
+      - name: Transfer app.env to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST}}
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "app.env"
-          target: "/home/arvalinno/app/"
-
-      - name: Update code on VPS (git pull)
-        uses: appleboy/ssh-action@v0.1.3
-        with:
-          host: arva888.xyz
-          username: arvalinno
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd /home/arvalinno/app
-            git pull origin main
+          target: "/home/${{ secrets.SSH_USERNAME }}/app/"
 
       - name: Build Docker images on VPS
-        uses: appleboy/ssh-action@v0.1.3
+        uses: appleboy/ssh-action@master
         with:
-          host: arva888.xyz
-          username: arvalinno
+          host: ${{ secrets.SSH_HOST}}
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/arvalinno/app
+            cd /home/${{ secrets.SSH_USERNAME }}/app
             docker compose build --no-cache
 
       - name: Deploy application using Docker Compose
-        uses: appleboy/ssh-action@v0.1.3
+        uses: appleboy/ssh-action@master
         with:
-          host: arva888.xyz
-          username: arvalinno
+          host: ${{ secrets.SSH_HOST}}
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/arvalinno/app
-            docker compose down && docker compose up -d
+            # Set environment variables using GitHub Secrets
+            export DB_USER="${{ secrets.DB_USER }}"
+            export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+            export DB_NAME="${{ secrets.DB_NAME}}"
+            export DB_DRIVER="${{ secrets.DB_DRIVER}}"
+
+            # Pass environment variables to Docker Compose
+            cd /home/${{ secrets.SSH_USERNAME }}/app
+            DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_NAME=$DB_NAME DB_DRIVER=$DB_DRIVER docker compose down && docker compose up -d
