@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"log"
 	"time"
 
@@ -13,7 +12,8 @@ import (
 type Config struct {
 	DBDriver             string        `mapstructure:"DB_DRIVER"`
 	DBSource             string        `mapstructure:"DB_SOURCE"`
-	ServerAddress        string        `mapstructure:"SERVER_ADDRESS"`
+	HTTPServerAddress    string        `mapstructure:"HTTP_SERVER_ADDRESS"`
+	GRPCServerAddress    string        `mapstructure:"GRPC_SERVER_ADDRESS"`
 	TokenSymmetricKey    string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`
 	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
@@ -35,7 +35,8 @@ func LoadConfig(path string) (config Config, err error) {
 
 			config.DBDriver = viper.GetString("DB_DRIVER")
 			config.DBSource = viper.GetString("DB_SOURCE")
-			config.ServerAddress = viper.GetString("SERVER_ADDRESS")
+			config.HTTPServerAddress = viper.GetString("HTTP_SERVER_ADDRESS")
+			config.GRPCServerAddress = viper.GetString("GRPC_SERVER_ADDRESS")
 			config.TokenSymmetricKey = viper.GetString("TOKEN_SYMMETRIC_KEY")
 			config.AccessTokenDuration = viper.GetDuration("ACCESS_TOKEN_DURATION")
 			config.RefreshTokenDuration = viper.GetDuration("REFRESH_TOKEN_DURATION")
@@ -45,8 +46,6 @@ func LoadConfig(path string) (config Config, err error) {
 				return config, err
 			}
 
-			fmt.Println("debug env:", config, err)
-
 			return config, nil
 		} else {
 			return config, err
@@ -55,8 +54,6 @@ func LoadConfig(path string) (config Config, err error) {
 	} else {
 		err = viper.Unmarshal(&config)
 	}
-
-	fmt.Println("debug env2:", config, err)
 
 	return config, err
 }
