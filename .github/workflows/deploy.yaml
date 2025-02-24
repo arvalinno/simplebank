@@ -55,6 +55,16 @@ jobs:
           source: "app.env"
           target: "/home/${{ secrets.SSH_USERNAME }}/app/"
 
+      - name: Load app.env
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST}}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_1 }}
+          script: |
+            cd /home/${{ secrets.SSH_USERNAME }}/app
+            source app.env
+
       - name: Build Docker images on VPS
         uses: appleboy/ssh-action@master
         with:
@@ -63,7 +73,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY_1 }}
           script: |
             cd /home/${{ secrets.SSH_USERNAME }}/app
-            docker compose build --no-cache
+            DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_NAME=$DB_NAME DB_DRIVER=$DB_DRIVER docker compose build --no-cache
 
       - name: Deploy application using Docker Compose
         uses: appleboy/ssh-action@master
@@ -72,12 +82,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY_1 }}
           script: |
-            # Set environment variables using GitHub Secrets
-            export DB_USER="${{ secrets.DB_USER }}"
-            export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
-            export DB_NAME="${{ secrets.DB_NAME}}"
-            export DB_DRIVER="${{ secrets.DB_DRIVER}}"
-
             # Pass environment variables to Docker Compose
             cd /home/${{ secrets.SSH_USERNAME }}/app
             DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_NAME=$DB_NAME DB_DRIVER=$DB_DRIVER docker compose down && docker compose up -d
