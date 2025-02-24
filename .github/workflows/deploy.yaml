@@ -20,7 +20,8 @@ jobs:
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> app.env
           echo "DB_DRIVER=${{ secrets.DB_DRIVER }}" >> app.env
           echo "DB_SOURCE=${{ secrets.DB_SOURCE }}" >> app.env
-          echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}" >> app.env
+          echo "HTTP_SERVER_ADDRESS=${{ secrets.HTTP_SERVER_ADDRESS }}" >> app.env
+          echo "GRPC_SERVER_ADDRESS=${{ secrets.GRPC_SERVER_ADDRESS }}" >> app.env
           echo "TOKEN_SYMMETRIC_KEY=${{ secrets.TOKEN_SYMMETRIC_KEY }}" >> app.env
           echo "ACCESS_TOKEN_DURATION=${{ secrets.ACCESS_TOKEN_DURATION }}" >> app.env
       
