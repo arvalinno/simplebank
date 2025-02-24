@@ -73,7 +73,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY_1 }}
           script: |
             cd /home/${{ secrets.SSH_USERNAME }}/app
-            docker compose build --no-cache
+            DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_NAME=$DB_NAME DB_DRIVER=$DB_DRIVER docker compose build --no-cache
 
       - name: Deploy application using Docker Compose
         uses: appleboy/ssh-action@master
