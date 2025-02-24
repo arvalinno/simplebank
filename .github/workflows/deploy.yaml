@@ -24,7 +24,7 @@ jobs:
       - name: Set up SSH (read-write permission) and add VPS to known_hosts
         run: |
           mkdir -p ~/.ssh
-          echo "${SSH_PRIVATE_KEY}" > private_key.pem
+          echo "${SSH_PRIVATE_KEY_1}" > private_key.pem
           chmod 600 private_key.pem 
           ssh-keyscan ${{ secrets.SSH_HOST}} >> ~/.ssh/known_hosts
         
@@ -33,7 +33,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST}}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_1 }}
           script: |
             mkdir -p app
             cd /home/${{ secrets.SSH_USERNAME }}/app
@@ -51,7 +51,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST}}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_1 }}
           source: "app.env"
           target: "/home/${{ secrets.SSH_USERNAME }}/app/"
 
@@ -60,7 +60,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST}}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_1 }}
           script: |
             cd /home/${{ secrets.SSH_USERNAME }}/app
             docker compose build --no-cache
@@ -70,7 +70,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST}}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_1 }}
           script: |
             # Set environment variables using GitHub Secrets
             export DB_USER="${{ secrets.DB_USER }}"
