@@ -15,6 +15,8 @@ jobs:
 
       - name: Create app.env file
         run: |
+          echo "DB_USER=${{ secrets.DB_USER }}" >> app.env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> app.env
           echo "DB_DRIVER=${{ secrets.DB_DRIVER }}" >> app.env
           echo "DB_SOURCE=${{ secrets.DB_SOURCE }}" >> app.env
           echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}" >> app.env
