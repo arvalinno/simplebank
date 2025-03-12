@@ -16,6 +16,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rakyll/statik/fs"
+	"github.com/rs/cors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -105,13 +106,15 @@ func runGatewayServer(config util.Config, store db.Store) {
 	swaggerHandler := http.StripPrefix("/swagger/", http.FileServer(statikFS))
 	mux.Handle("/swagger/", swaggerHandler)
 
+	corsHandler := cors.AllowAll().Handler(mux)
+
 	listener, err := net.Listen("tcp", config.HTTPServerAddress)
 	if err != nil {
 		log.Fatal("cannot create listener:", err)
 	}
 
 	log.Printf("start HTTP gateway server at %s", listener.Addr().String())
-	err = http.Serve(listener, mux)
+	err = http.Serve(listener, corsHandler)
 	if err != nil {
 		log.Fatal("cannot start HTTP gateway server:", err)
 	}
