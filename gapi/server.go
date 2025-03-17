@@ -3,10 +3,12 @@ package gapi
 import (
 	"fmt"
 
+	"github.com/arvalinno/simplebank/api"
 	db "github.com/arvalinno/simplebank/db/sqlc"
 	"github.com/arvalinno/simplebank/pb"
 	"github.com/arvalinno/simplebank/token"
 	"github.com/arvalinno/simplebank/util"
+	"github.com/go-playground/validator/v10"
 )
 
 // Server serves gRPC requests for our banking service.
@@ -23,6 +25,10 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 	if err != nil {
 		return nil, fmt.Errorf("cannot create token maker: %w", err)
 	}
+
+	validate := validator.New()
+	validate.RegisterValidation("currency", api.ValidCurrency)
+
 	server := &Server{
 		config:     config,
 		store:      store,

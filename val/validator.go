@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/mail"
 	"regexp"
+
+	"github.com/arvalinno/simplebank/util"
 )
 
 var (
@@ -50,5 +52,14 @@ func ValidateEmail(value string) error {
 	if _, err := mail.ParseAddress(value); err != nil {
 		return fmt.Errorf("is not a valid email address")
 	}
+	return nil
+}
+
+func ValidateCurrency(value string) error {
+	ok := util.IsSupportedCurrency(value)
+	if !ok {
+		return fmt.Errorf("only supported USD, EUR, CAD currencies")
+	}
+
 	return nil
 }
