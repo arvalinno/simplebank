@@ -29,8 +29,6 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 	validate := validator.New()
 	validate.RegisterValidation("currency", api.ValidCurrency)
 
-	fmt.Println("Sini")
-
 	server := &Server{
 		config:     config,
 		store:      store,
