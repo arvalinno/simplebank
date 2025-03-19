@@ -24,7 +24,7 @@
     "/v1/create_account": {
       "post": {
         "summary": "Create Account",
-        "description": "Use this API to login user and get access token \u0026 refresh token",
+        "description": "Use this API to create account in the logged-in user for specific currency account",
         "operationId": "SimpleBank_CreateAccount",
         "responses": {
           "200": {
@@ -82,6 +82,46 @@
             "schema": {
               "$ref": "#/definitions/pbCreateUserRequest"
             }
+          }
+        ],
+        "tags": [
+          "SimpleBank"
+        ]
+      }
+    },
+    "/v1/list_accounts": {
+      "get": {
+        "summary": "List Account",
+        "description": "Use this API to list all accounts that logged-in user has",
+        "operationId": "SimpleBank_ListAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbListAccountResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "tags": [
@@ -186,6 +226,18 @@
       "properties": {
         "user": {
           "$ref": "#/definitions/pbUser"
+        }
+      }
+    },
+    "pbListAccountResponse": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/pbAccount"
+          }
         }
       }
     },
