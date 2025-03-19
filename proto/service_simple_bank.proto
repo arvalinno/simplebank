@@ -63,5 +63,4 @@ service SimpleBank {
             summary: "List Account"
         };
     }
-
 }
