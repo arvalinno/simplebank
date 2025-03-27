@@ -71,7 +71,7 @@ service SimpleBank {
         };
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             description: "This API is for getting token for each new transaction request using midtrans"
-            summary: "Reques Midtrans Tokenc"
+            summary: "Request Midtrans Token"
         };
     }
 }

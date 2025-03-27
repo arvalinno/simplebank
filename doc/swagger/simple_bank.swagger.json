@@ -165,7 +165,7 @@
     },
     "/v1/request_token": {
       "post": {
-        "summary": "Reques Midtrans Tokenc",
+        "summary": "Request Midtrans Token",
         "description": "This API is for getting token for each new transaction request using midtrans",
         "operationId": "SimpleBank_RequestToken",
         "responses": {
