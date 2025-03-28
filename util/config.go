@@ -4,6 +4,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/midtrans/midtrans-go"
 	"github.com/spf13/viper"
 )
 
@@ -41,6 +42,10 @@ func LoadConfig(path string) (config Config, err error) {
 			config.AccessTokenDuration = viper.GetDuration("ACCESS_TOKEN_DURATION")
 			config.RefreshTokenDuration = viper.GetDuration("REFRESH_TOKEN_DURATION")
 
+			// load midtrans config
+			midtrans.ServerKey = viper.GetString("SERVER_KEY")
+			midtrans.Environment = midtrans.Sandbox
+
 			// Check if essential configurations are still missing
 			if config.DBSource == "" {
 				return config, err
@@ -53,6 +58,10 @@ func LoadConfig(path string) (config Config, err error) {
 
 	} else {
 		err = viper.Unmarshal(&config)
+
+		// load midtrans config
+		midtrans.ServerKey = viper.GetString("SERVER_KEY")
+		midtrans.Environment = midtrans.Sandbox
 	}
 
 	return config, err

@@ -30,9 +30,10 @@ func (server *Server) ListAccount(ctx context.Context, req *pb.ListAccountReques
 	pbAccounts := []*pb.Account{}
 	for i := range dbAccounts {
 		tempAccount := &pb.Account{
-			Id:      dbAccounts[i].ID,
-			Owner:   dbAccounts[i].Owner,
-			Balance: dbAccounts[i].Balance,
+			Id:       dbAccounts[i].ID,
+			Owner:    dbAccounts[i].Owner,
+			Balance:  dbAccounts[i].Balance,
+			Currency: dbAccounts[i].Currency,
 		}
 		pbAccounts = append(pbAccounts, tempAccount)
 	}
