@@ -31,9 +31,9 @@ func (server *Server) RequestToken(ctx context.Context, req *pb.RequestTokenRequ
 		},
 	}
 
-	resp, err := snap.CreateTransactionToken(snapReq)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "error: %s", err)
+	resp, errMidtrans := snap.CreateTransactionToken(snapReq)
+	if errMidtrans != nil {
+		return nil, status.Errorf(codes.Internal, "error: %s", errMidtrans.GetMessage())
 	}
 
 	grpcResp := &pb.RequestTokenResponse{
