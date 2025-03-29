@@ -24,6 +24,8 @@ jobs:
           echo "GRPC_SERVER_ADDRESS=${{ secrets.GRPC_SERVER_ADDRESS }}" >> app.env
           echo "TOKEN_SYMMETRIC_KEY=${{ secrets.TOKEN_SYMMETRIC_KEY }}" >> app.env
           echo "ACCESS_TOKEN_DURATION=${{ secrets.ACCESS_TOKEN_DURATION }}" >> app.env
+          echo "CLIENT_KEY=${{ secrets.CLIENT_KEY }}" >> app.env
+          echo "SERVER_KEY=${{ secrets.SERVER_KEY }}" >> app.env
       
       - name: Set up SSH (read-write permission) and add VPS to known_hosts
         run: |
