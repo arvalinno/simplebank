@@ -2,14 +2,20 @@ package gapi
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/arvalinno/simplebank/pb"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/snap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (server *Server) RequestToken(ctx context.Context, req *pb.RequestTokenRequest) (*pb.RequestTokenResponse, error) {
+	_, err := server.authorizeUser(ctx)
+	if err != nil {
+		return nil, status.Errorf(codes.Unauthenticated, "unauthorized: %s", err)
+	}
+
 	snapReq := &snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  req.OrderId,
@@ -27,9 +33,8 @@ func (server *Server) RequestToken(ctx context.Context, req *pb.RequestTokenRequ
 
 	resp, err := snap.CreateTransactionToken(snapReq)
 	if err != nil {
-		fmt.Println("Error :", err.GetMessage())
+		return nil, status.Errorf(codes.Internal, "error: %s", err)
 	}
-	fmt.Println("Response : ", resp)
 
 	grpcResp := &pb.RequestTokenResponse{
 		Token: resp,
